@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router, private apiService: ApiService) { }
 
-  public title: string = '';
+  public title: string = 'tech2hire';
   public userList = [];
   public expensesList = [];
   public userSelected = false;
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   public inputParam: boolean;
   public negativeValue: boolean;
   public tempAmount: number;
+  public startedAnalysis: boolean = false;
   ngOnInit(): void {
     this.fetchUserDetails();
   }
@@ -119,5 +120,13 @@ export class AppComponent implements OnInit {
         })
       }
     }
+  }
+
+  public getAnalysis() {
+    this.startedAnalysis = true;
+  }
+
+  public removeAnalysis() {
+    this.startedAnalysis = false;
   }
 }
