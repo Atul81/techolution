@@ -1,0 +1,52 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+</div>
+<div>
+  <div>
+    <p>Please select the user name:</p>
+    <kendo-dropdownlist [data]="userList" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
+      (valueChange)="userChange($event)" [defaultItem]="defaultItem">
+    </kendo-dropdownlist>
+  </div>
+  <div *ngIf="userSelected">
+    <span> <p>Your available balance is: {{savedExpenseLimit}} INR</p>
+    <span *ngIf = "negativeValue">You have crossed your monthly limit by {{tempAmount}}. Please chose a different amount</span></span>
+  </div>
+</div>
+<br>
+<div *ngIf="noExpenseLimit">
+  Please update the expense limit
+  <kendo-textbox-container floatingLabel="Expense Limit">
+    <kendo-numerictextbox [(ngModel)]="expenseLimit" [min]="0" required>
+    </kendo-numerictextbox>
+  </kendo-textbox-container>
+  <button kendoButton (click)="submitLimit()">
+    Update
+  </button>
+</div>
+<div *ngIf="userSelected">
+  <p>Please select the dining type</p>
+  <kendo-dropdownlist [data]="expensesList" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
+    (valueChange)="expenseChange($event)" [defaultItem]="defaultItem">
+  </kendo-dropdownlist>
+
+  Please input the expenditure:
+  <kendo-textbox-container floatingLabel="Expense Limit">
+    <kendo-numerictextbox [(ngModel)]="expenseLimit" [min]="0" required>
+    </kendo-numerictextbox>
+  </kendo-textbox-container>
+
+  <div>
+    <p>Select a date:</p>
+    <kendo-datepicker [(value)]="valueStart"></kendo-datepicker>
+  </div>
+  <span><button kendoButton (click)="submitExpenditure()">
+      Expend
+    </button>
+    <span *ngIf = "inputParam">Please fill in the details</span>
+  </span>
+</div>
+<router-outlet></router-outlet>
