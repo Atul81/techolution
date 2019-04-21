@@ -8972,3 +8972,10 @@
       border: 1px solid #ddd !important;
     }
   }
+
+  .validation {
+    font-size: larger;
+    font-weight: 400;
+    color: red;
+  }
+

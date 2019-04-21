@@ -10,9 +10,6 @@ export class ApiService {
     baseUrlExpense: string = 'http://localhost:8080/expenses/';
     baseUrlMisc: string = 'http://localhost:8080/misc/';
 
-    checkingApi(): Observable<any>{
-        return this.http.get(this.baseUrlExpense +'test');
-    }
     getUsers(): Observable<any> {
         return this.http.get(this.baseUrlMisc+ 'users');
     }
@@ -28,4 +25,16 @@ export class ApiService {
     updateExpenses(user: User): Observable<any> {
         return this.http.post(this.baseUrlExpense + 'updateExpenses', user);
     } 
+
+    getGraphData(id: number): Observable<any> {
+        return this.http.post(this.baseUrlExpense + 'getAnalysisData/'+ id, null);
+    }
+
+    getDatesGraphicalData(user: User): Observable<any> {
+        return this.http.post(this.baseUrlExpense + 'getAnalysisBwDates', user);
+    }
+
+    getAssessmentData(user: User): Observable<any> {
+        return this.http.post(this.baseUrlExpense + 'getAssessmentReport', user);
+    }
 }

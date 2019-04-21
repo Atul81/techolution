@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    Welcome to {{ title }}!
+    Welcome {{ title }}!
   </h1>
 </div>
 <div>
@@ -10,23 +10,34 @@
     <kendo-dropdownlist [data]="userList" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
       (valueChange)="userChange($event)" [defaultItem]="defaultItem">
     </kendo-dropdownlist>
-    <span style="margin-left: 50%;" *ngIf="userSelected">
-      <button kendoButton (click)="getAnalysis()">
+    <span style="margin-left: 50%;" *ngIf="userSelected && !generateAlgorithm">
+      <button kendoButton (click)="getAnalysis()" [primary]=true>
         Analysis
       </button>
     </span>
-    <span style="margin-left: 25%;" *ngIf="userSelected && startedAnalysis">
+    <span style="margin-left: 5%;" *ngIf="userSelected && startedAnalysis">
+      <button kendoButton (click)="getByDates()">
+        ByDates
+      </button> </span>
+    <span style="margin-left: 5%;" *ngIf="userSelected">
+      <button kendoButton (click)="generateAlgorithmReport()" [primary]="true">
+        Report
+      </button> </span>
+    <span style="margin-left: 5%;" *ngIf="userSelected && (startedAnalysis || generateAlgorithm)">
       <button kendoButton (click)="removeAnalysis()">
         Close
       </button> </span>
   </span>
 </div>
-<div *ngIf="!startedAnalysis">
+<br>
+<div *ngIf="!startedAnalysis && !generateAlgorithm">
   <div *ngIf="userSelected">
     <span>
-      <p>Your available balance is: {{savedExpenseLimit}} INR</p>
-      <span *ngIf="negativeValue">You have crossed your monthly limit by {{tempAmount}} INR. Please chose a different
-        amount</span>
+      <p style="font-weight: 700;">Your available balance is: <mark>{{savedExpenseLimit}}</mark> INR</p>
+      <span *ngIf="negativeValue" class="validation">You have crossed your monthly limit by {{tempAmount}} INR. Please
+        chose a different
+        amount.</span>
+        <span *ngIf="nearLimit" class="validation">You have crossed the threshold, Please check your reports before adding expenses.</span>
     </span>
   </div>
   <br>
@@ -35,8 +46,8 @@
     <kendo-textbox-container floatingLabel="Expense Limit">
       <kendo-numerictextbox [(ngModel)]="expenseLimit" [min]="0" required>
       </kendo-numerictextbox>
-    </kendo-textbox-container>
-    <button kendoButton (click)="submitLimit()">
+    </kendo-textbox-container> &nbsp; &nbsp;
+    <button kendoButton (click)="submitLimit()" [primary]=true>
       Update
     </button>
   </div>
@@ -45,7 +56,7 @@
     <kendo-dropdownlist [data]="expensesList" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
       (valueChange)="expenseChange($event)" [defaultItem]="defaultItem">
     </kendo-dropdownlist>
-
+    &nbsp; &nbsp;
     Please input the expenditure:
     <kendo-textbox-container floatingLabel="Expense Limit">
       <kendo-numerictextbox [(ngModel)]="expenseLimit" [min]="0" required>
@@ -56,12 +67,108 @@
       <p>Select a date:</p>
       <kendo-datepicker [(value)]="valueStart"></kendo-datepicker>
     </div>
-    <span><button kendoButton (click)="submitExpenditure()">
+    <br>
+    <span><button kendoButton (click)="submitExpenditure()" [primary]=true>
         Expend
-      </button>
-      <span *ngIf="inputParam">Please fill in the details</span>
+      </button> &nbsp; &nbsp;
+      <span *ngIf="inputParam" style="color: red;">Please fill in the details.</span>
     </span>
   </div>
+</div>
+<br>
+<div *ngIf="userSelected && startedAnalysis && !generateAlgorithm">
+  <div *ngIf="dateSelection">
+    <div class="row">
+      <div class="col-lg-2">
+        <p>Select from date:</p>
+        <kendo-datepicker [(value)]="valueStart" (valueChange)="onDateChange($event)"></kendo-datepicker>
+      </div>
+      <div class="col-lg-2">
+        <p>Select to date:</p>
+        <kendo-datepicker [(value)]="valueEnd" (valueChange)="onDateChange($event)"></kendo-datepicker>
+      </div>
+      &nbsp; &nbsp;
+      <div class="col-lg-2">
+        <button kendoButton (click)="datesDataPopulation()" [primary]=true>
+          Fetch
+        </button>
+      </div>
+    </div>
+    <div *ngIf="dateValidation" style="color: red;">
+      Please select a valid from and to date.
+    </div>
+    <br>
+  </div>
+  <br>
+  <p> In the analysis part</p>
+  <div class="example-config">
+    <button kendo-button (click)="pdf.saveAs('techolution.pdf')">
+      Save As PDF...
+    </button>
+  </div>
+  <kendo-pdf-export #pdf paperSize="auto" margin="2cm" landscape="true" date="new Date()">
+    <kendo-chart [categoryAxis]="{ categories: categories }">
+      <kendo-chart-title text="Graphical Analysis of Expenses"></kendo-chart-title>
+      <kendo-chart-legend position="top" orientation="horizontal"></kendo-chart-legend>
+      <kendo-chart-tooltip format="{0} INR"></kendo-chart-tooltip>
+      <kendo-chart-series>
+        <kendo-chart-series-item *ngFor="let item of series" type="line" [style]="smooth" [data]="item.data"
+          [name]="item.name">
+        </kendo-chart-series-item>
+      </kendo-chart-series>
+    </kendo-chart>
+  </kendo-pdf-export>
+</div>
+<br>
+<div *ngIf="generateAlgorithm">
+  <div class="row">
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Shopping</p>
+      <p>Total spends: {{spendTotalObject.shopping}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.shopping}}</p>
+    </div>
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Food</p>
+      <p>Total spends: {{spendTotalObject.food}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.food}}</p>
+    </div>
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Dining</p>
+      <p>Total spends: {{spendTotalObject.dining}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.dining}}</p>
+    </div>
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Travel</p>
+      <p>Total spends: {{spendTotalObject.travel}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.travel}}</p>
+    </div>
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Entertainment</p>
+      <p>Total spends: {{spendTotalObject.enter}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.enter}}</p>
+    </div>
+    <div class="col-lg-2">
+      <p style="font-weight: 700;">Spend Details of Miscellaneous</p>
+      <p>Total spends: {{spendTotalObject.misc}}</p>
+      <p>Ratio of expenditure: {{spendRatioObject.misc}}</p>
+    </div>
+  </div>
+  <div>
+    <p style="font-weight: 700;">Maximum Expenditure</p>
+    <p>You have spent maximum of: {{analysisObj.maxAmount}} on {{analysisObj.maxAmountCategory}}</p>
+  </div>
+  <div>
+    <p style="font-weight: 700;">Maximum Ratio Type</p>
+    <p>Your maximum expenditure ratio is : {{analysisObj.maxRatio}} on {{analysisObj.maxRatioCategory}}</p>
+  </div>
+  <div *ngIf="analysisObj.crossedSchemas.length > 0">
+    <p style="font-weight: 700;">Crossed Maxima</p>
+    <p>Following expense type(s) have crossed maxima :</p>
+    <ul>
+      <li *ngFor="let itr of analysisObj.crossedSchemas">{{itr.name}}</li>
+    </ul>
 
+    <p style="color: red">Please avoid spending in the above categories!</p>
+  </div>
 </div>
 <router-outlet></router-outlet>

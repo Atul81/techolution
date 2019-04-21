@@ -11,6 +11,9 @@ public class UserMngEntity {
     private Double expenseLimit;
     private String userName;
     private Date ctDate;
+    private String delFlg;
+    private String userMonth;
+    private Double expenseInit;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -32,6 +35,35 @@ public class UserMngEntity {
         this.expenseLimit = expenseLimit;
     }
 
+    @Basic
+    @Column(name = "expense_init", nullable = false, precision = 0)
+    public Double getExpenseInit() {
+        return expenseInit;
+    }
+
+    public void setExpenseInit(Double expenseInit) {
+        this.expenseInit = expenseInit;
+    }
+
+    @Basic
+    @Column(name = "delFlg", nullable = true, length = 50)
+    public String getDelFlg() {
+        return delFlg;
+    }
+
+    public void setDelFlg(String delFlg) {
+        this.delFlg = delFlg;
+    }
+
+    @Basic
+    @Column(name = "user_month", nullable = true, length = 50)
+    public String getUserMonth() {
+        return userMonth;
+    }
+
+    public void setUserMonth(String userMonth) {
+        this.userMonth = userMonth;
+    }
 
     @Basic
     @Column(name = "user_name", nullable = true, length = 50)

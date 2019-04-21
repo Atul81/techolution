@@ -54,8 +54,7 @@ public class MiscController {
 
     @PostMapping("/updateExpense")
     public Boolean updateExpenseLimit(@RequestBody ExpenseMange expenseMange) {
-        miscService.updateExpenseLimit(expenseMange);
-        return false;
+        return miscService.updateExpenseLimit(expenseMange);
     }
 
     @GetMapping("/getExpenses")
@@ -67,6 +66,6 @@ public class MiscController {
             responseExpenses.setHeaderModel(headerModel());
         return new ResponseEntity<>(responseExpenses, HttpStatus.OK);
     }
-   // @PostMapping("findUser/{userId}")
+
 
 }

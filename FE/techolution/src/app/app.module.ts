@@ -12,6 +12,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { ChartsModule } from '@progress/kendo-angular-charts';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { PDFExportModule } from '@progress/kendo-angular-pdf-export';
+import 'hammerjs';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
     HttpClientJsonpModule,
     DropDownsModule,
     FormsModule,
-    IntlModule, DateInputsModule
+    IntlModule, 
+    DateInputsModule,
+    ChartsModule,
+    ButtonsModule,
+    PDFExportModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

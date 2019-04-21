@@ -6,4 +6,6 @@ export class User {
     public expenseDate: Date;
 
     public expensetype: number;
+
+    public expenseEndDate: Date;
 }

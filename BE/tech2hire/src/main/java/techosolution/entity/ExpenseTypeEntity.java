@@ -9,7 +9,7 @@ public class ExpenseTypeEntity {
     private Integer typeId;
     private String typeDesc;
     private Date ctTime;
-
+    private Double typePrior;
     @Id
     @Column(name = "type_id", nullable = false)
     public Integer getTypeId() {
@@ -40,6 +40,16 @@ public class ExpenseTypeEntity {
         this.ctTime = ctTime;
     }
 
+    @Basic
+    @Column(name = "type_prior", nullable = false)
+    public Double getTypePrior() {
+        return typePrior;
+    }
+
+    public void setTypePrior(Double typePrior) {
+        this.typePrior = typePrior;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,7 +57,8 @@ public class ExpenseTypeEntity {
         ExpenseTypeEntity that = (ExpenseTypeEntity) o;
         return Objects.equals(typeId, that.typeId) &&
                 Objects.equals(typeDesc, that.typeDesc) &&
-                Objects.equals(ctTime, that.ctTime);
+                Objects.equals(ctTime, that.ctTime)  &&
+                Objects.equals(typePrior, that.typePrior);
     }
 
     @Override

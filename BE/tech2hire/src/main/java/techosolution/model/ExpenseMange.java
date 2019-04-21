@@ -11,7 +11,7 @@ public class ExpenseMange implements Serializable {
     private Integer identifier;
     private Date expenseDate;
     private Integer expensetype;
-
+    private Date expenseEndDate;
     public Double getExpenseAmount() {
         return expenseAmount;
     }
@@ -42,5 +42,13 @@ public class ExpenseMange implements Serializable {
 
     public void setExpensetype(Integer expensetype) {
         this.expensetype = expensetype;
+    }
+
+    public Date getExpenseEndDate() {
+        return expenseEndDate;
+    }
+
+    public void setExpenseEndDate(Date expenseEndDate) {
+        this.expenseEndDate = expenseEndDate;
     }
 }
