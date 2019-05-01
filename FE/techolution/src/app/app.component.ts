@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from './app-service.component';
 import { User } from './userData.component';
+import { ExpenseReportComponent } from './expense-report/expense-report.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router, private apiService: ApiService) { }
 
+  @ViewChild(ExpenseReportComponent) expenseReport;
   public title: string = 'to tech2hire';
   public userList = [];
   public expensesList = [];
@@ -71,9 +73,19 @@ export class AppComponent implements OnInit {
   public generateAlgorithm: boolean;
   public initSetLimit: number;
   public nearLimit: boolean;
+  public dataExchange: string = 'Initial';
+  public eventChanger: string = 'Default';
+
+  ngAfterViewInit() {
+    // this.dataExchange = this.expenseReport.message;
+  }
   ngOnInit(): void {
     this.fetchUserDetails();
     this.fetchExpense();
+  }
+
+  dataEventHandler(event) {
+    this.dataExchange = event;
   }
 
   public fetchUserDetails() {
@@ -175,6 +187,7 @@ export class AppComponent implements OnInit {
       if (!this.negativeValue) {
         this.apiService.updateExpenses(this.userDetails).subscribe(data => {
           //  console.log(data);
+          this.eventChanger = 'Event Changed';
         }, error => {
           alert(JSON.stringify(error));
         })
@@ -184,6 +197,7 @@ export class AppComponent implements OnInit {
           this.expenseLimit = null;
         });
       }
+      this.eventChanger = 'Initial';
     }
   }
 

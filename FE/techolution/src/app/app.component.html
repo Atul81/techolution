@@ -6,6 +6,8 @@
 </div>
 <div>
   <p>Please select the user name:</p>
+  <p> Message : {{dataExchange}}</p>
+  <app-expense-report [userDetails] = "userDetails" [changeEvent] = "eventChanger" (dataEvent) = "dataEventHandler($event)"></app-expense-report>
   <span>
     <kendo-dropdownlist [data]="userList" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true"
       (valueChange)="userChange($event)" [defaultItem]="defaultItem">
