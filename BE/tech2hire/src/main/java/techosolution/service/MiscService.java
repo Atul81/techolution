@@ -14,4 +14,6 @@ public interface MiscService {
     List<ExpenseTypeEntity> fetchAllTypeExpenses();
 
     boolean updateExpenseLimit(ExpenseMange expenseMange);
+
+    Object getTableDetails(String tableName);
 }

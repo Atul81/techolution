@@ -11,7 +11,6 @@ import techosolution.entity.ExpenseTypeEntity;
 import techosolution.entity.UserMngEntity;
 import techosolution.model.ExpenseMange;
 import techosolution.model.HeaderModel;
-import techosolution.model.MiscParam;
 import techosolution.model.Response;
 import techosolution.service.MiscService;
 
@@ -65,6 +64,12 @@ public class MiscController {
         if(null != responseExpenses.getResponse())
             responseExpenses.setHeaderModel(headerModel());
         return new ResponseEntity<>(responseExpenses, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getTableConfig/{tableName}")
+    public org.springframework.http.ResponseEntity getTableConfig(@org.springframework.web.bind.annotation.PathVariable("tableName") String tableName) {
+
+        return new ResponseEntity(miscService.getTableDetails(tableName), HttpStatus.OK);
     }
 
 
